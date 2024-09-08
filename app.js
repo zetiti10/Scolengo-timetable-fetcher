@@ -52,7 +52,7 @@ app.get('/agenda', async (req, res) => {
 
     const today = new Date();
     const previousDay = new Date(today);
-    previousDay.setDate(today.getDate() - 1);
+    previousDay.setDate(today.getDate() - 7);
     const oneMonthLater = new Date(previousDay);
     oneMonthLater.setMonth(previousDay.getMonth() + 1);
     const startDate = formatDate(previousDay);
