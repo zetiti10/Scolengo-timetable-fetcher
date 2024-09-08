@@ -35,8 +35,3 @@ En plus de cela, il est nécessaire de renseigner les variables `USERNAME` et `P
 ## Utilisation
 
 Une fois le déploiement complété, il suffit d'appeler l'URL sous cette forme : `https://username:password@account.onrender.com/agenda` pour obtenir l'agenda.
-
-
-This is the [Express](https://expressjs.com) [Hello world](https://expressjs.com/en/starter/hello-world.html) example on [Render](https://render.com).
-
-The app in this repo is deployed at [https://express.onrender.com](https://express.onrender.com).
