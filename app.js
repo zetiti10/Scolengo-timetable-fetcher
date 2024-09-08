@@ -1,7 +1,19 @@
 const express = require('express');
 const { Skolengo } = require('scolengo-api');
+const basicAuth = require('express-basic-auth');
 const app = express();
 require('dotenv').config();
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+const username = process.env.USERNAME;
+const password = process.env.PASSWORD;
+const users = { [username]: password };
 
 const config = {
   "tokenSet": {
@@ -27,14 +39,27 @@ const config = {
   }
 }
 
+app.use(basicAuth({
+  users: users,
+  challenge: true,
+  realm: 'Protected Area'
+}));
+
 app.get('/agenda', async (req, res) => {
   try {
     const user = await Skolengo.fromConfigObject(config);
     const infoUser = await user.getUserInfo();
-    console.log(`Correctement authentifié sous l'identifiant ${infoUser.id}`);
+
+    const today = new Date();
+    const previousDay = new Date(today);
+    previousDay.setDate(today.getDate() - 1);
+    const oneMonthLater = new Date(previousDay);
+    oneMonthLater.setMonth(previousDay.getMonth() + 1);
+    const startDate = formatDate(previousDay);
+    const endDate = formatDate(oneMonthLater);
 
     const studentId = infoUser.id;
-    const agenda = await user.getAgenda(studentId, '2024-09-09', '2024-09-29');
+    const agenda = await user.getAgenda(studentId, startDate, endDate);
 
     res.setHeader('Content-Type', 'text/calendar');
     res.send(agenda.toICalendar());
