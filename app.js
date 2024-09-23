@@ -1,6 +1,6 @@
-const express = require('express');
-const { Skolengo } = require('scolengo-api');
-const basicAuth = require('express-basic-auth');
+import express from 'express';
+import { Skolengo } from 'scolengo-api';
+import basicAuth from 'express-basic-auth';
 const { writeFileSync } = require("node:fs");
 const app = express();
 require('dotenv').config();
