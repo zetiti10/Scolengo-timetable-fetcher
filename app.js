@@ -1,6 +1,8 @@
 const express = require('express');
 const { Skolengo } = require('scolengo-api');
 const basicAuth = require('express-basic-auth');
+const config = require("./tokenset.json");
+const { writeFileSync } = require("node:fs");
 const app = express();
 require('dotenv').config();
 
@@ -39,6 +41,11 @@ const config = {
   }
 }
 
+const sko = await Skolengo.fromConfigObject(config, { onTokenRefresh: (tokenSet) => {
+  config.tokenSet = tokenSet
+  writeFileSync("./tokenset.json", JSON.stringify(config))
+}});
+
 app.use(basicAuth({
   users: users,
   challenge: true,
@@ -51,12 +58,12 @@ app.get('/agenda', async (req, res) => {
     const infoUser = await user.getUserInfo();
 
     const today = new Date();
-    const previousDay = new Date(today);
-    previousDay.setDate(today.getDate() - 7);
-    const oneMonthLater = new Date(previousDay);
-    oneMonthLater.setMonth(previousDay.getMonth() + 1);
-    const startDate = formatDate(previousDay);
-    const endDate = formatDate(oneMonthLater);
+    const startDay = new Date(today);
+    startDay.setDate(today.getDate() - 7);
+    const endDay = new Date(today);
+    endDay.setMonth(startDay.getMonth() + 2);
+    const startDate = formatDate(startDay);
+    const endDate = formatDate(endDay);
 
     const studentId = infoUser.id;
     const agenda = await user.getAgenda(studentId, startDate, endDate);
