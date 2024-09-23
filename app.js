@@ -1,8 +1,12 @@
 import express from 'express';
 import { Skolengo } from 'scolengo-api';
 import basicAuth from 'express-basic-auth';
+import { config as dotenvConfig } from 'dotenv';
+import { writeFileSync } from 'fs';
+
+dotenvConfig();
+
 const app = express();
-require('dotenv').config();
 
 function formatDate(date) {
   const year = date.getFullYear();
