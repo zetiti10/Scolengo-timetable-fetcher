@@ -1,7 +1,6 @@
 const express = require('express');
 const { Skolengo } = require('scolengo-api');
 const basicAuth = require('express-basic-auth');
-const config = require("./tokenset.json");
 const { writeFileSync } = require("node:fs");
 const app = express();
 require('dotenv').config();
